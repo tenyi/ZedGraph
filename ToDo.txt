@@ -1,4 +1,4 @@
-TODO for ZedGraph:
+﻿TODO for ZedGraph:
 
 Stick item for stick charts, sticks go to X axis (or base axis)
 Expose Line Style for ArrowItem, StickItem

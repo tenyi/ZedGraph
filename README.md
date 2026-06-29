@@ -1,4 +1,4 @@
-# ZedGraph
+﻿# ZedGraph
 
 *The charting library for .NET*
 

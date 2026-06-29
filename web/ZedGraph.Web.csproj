@@ -52,14 +52,14 @@
     <Compile Include="ZedGraph.Web\ZedGraphWebTools.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\source\ZedGraph.Net35.csproj">
-      <Project>{2541686B-1673-43BF-AF89-3163945DB009}</Project>
-      <Name>ZedGraph.Net35</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
     <None Include="zedgraphkey.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\source\ZedGraph\ZedGraph.csproj">
+      <Project>{86c5c459-a26f-a160-601e-db61a77c8c5e}</Project>
+      <Name>ZedGraph</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
