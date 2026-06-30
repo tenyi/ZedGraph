@@ -971,25 +971,31 @@ namespace ZedGraph
 			using ( Graphics g = Graphics.FromImage( bm ) )
 			{
 				IntPtr hdc = g.GetHdc();
-				Stream stream = new MemoryStream();
-				Metafile metafile = new Metafile( stream, hdc, _rect,
-							MetafileFrameUnit.Pixel, EmfType.EmfPlusDual );
-				g.ReleaseHdc( hdc );
-
-				using ( Graphics metafileGraphics = Graphics.FromImage( metafile ) )
+				// BUG FIX (M12): 將 MemoryStream 改為 using 明確釋放，
+				// 避免 method 結束時 stream 失去引用而未 Dispose（M12 資源管理）。
+				// 注意：Metafile 建構後由呼叫端負責 Dispose stream；using 確保即使
+				// 後續繪製流程拋出例外，stream 仍會在離開 scope 時釋放。
+				using ( Stream stream = new MemoryStream() )
 				{
-					//metafileGraphics.TranslateTransform( -_rect.Left, -_rect.Top );
-					metafileGraphics.PageUnit = System.Drawing.GraphicsUnit.Pixel;
-					PointF P = new PointF( width, height );
-					PointF[] PA = new PointF[] { P };
-					metafileGraphics.TransformPoints( CoordinateSpace.Page, CoordinateSpace.Device, PA );
-					//metafileGraphics.PageScale = 1f;
+					Metafile metafile = new Metafile( stream, hdc, _rect,
+								MetafileFrameUnit.Pixel, EmfType.EmfPlusDual );
+					g.ReleaseHdc( hdc );
 
-					// output
-					MakeImage( metafileGraphics, width, height, isAntiAlias );
-					//this.Draw( metafileGraphics );
+					using ( Graphics metafileGraphics = Graphics.FromImage( metafile ) )
+					{
+						//metafileGraphics.TranslateTransform( -_rect.Left, -_rect.Top );
+						metafileGraphics.PageUnit = System.Drawing.GraphicsUnit.Pixel;
+						PointF P = new PointF( width, height );
+						PointF[] PA = new PointF[] { P };
+						metafileGraphics.TransformPoints( CoordinateSpace.Page, CoordinateSpace.Device, PA );
+						//metafileGraphics.PageScale = 1f;
 
-					return metafile;
+						// output
+						MakeImage( metafileGraphics, width, height, isAntiAlias );
+						//this.Draw( metafileGraphics );
+
+						return metafile;
+					}
 				}
 			}
 		}
@@ -1024,24 +1030,28 @@ namespace ZedGraph
 			using ( Graphics g = Graphics.FromImage( bm ) )
 			{
 				IntPtr hdc = g.GetHdc();
-				Stream stream = new MemoryStream();
-				Metafile metafile = new Metafile( stream, hdc, _rect,
-							MetafileFrameUnit.Pixel, EmfType.EmfOnly );
-
-				using ( Graphics metafileGraphics = Graphics.FromImage( metafile ) )
+				// BUG FIX (M12): 將 MemoryStream 改為 using 明確釋放，
+				// 避免 method 結束時 stream 失去引用而未 Dispose（M12 資源管理）。
+				using ( Stream stream = new MemoryStream() )
 				{
-					metafileGraphics.TranslateTransform( -_rect.Left, -_rect.Top );
-					metafileGraphics.PageUnit = System.Drawing.GraphicsUnit.Pixel;
-					PointF P = new PointF( _rect.Width, _rect.Height );
-					PointF[] PA = new PointF[] { P };
-					metafileGraphics.TransformPoints( CoordinateSpace.Page, CoordinateSpace.Device, PA );
-					//metafileGraphics.PageScale = 1f;
+					Metafile metafile = new Metafile( stream, hdc, _rect,
+								MetafileFrameUnit.Pixel, EmfType.EmfOnly );
 
-					// output
-					this.Draw( metafileGraphics );
+					using ( Graphics metafileGraphics = Graphics.FromImage( metafile ) )
+					{
+						metafileGraphics.TranslateTransform( -_rect.Left, -_rect.Top );
+						metafileGraphics.PageUnit = System.Drawing.GraphicsUnit.Pixel;
+						PointF P = new PointF( _rect.Width, _rect.Height );
+						PointF[] PA = new PointF[] { P };
+						metafileGraphics.TransformPoints( CoordinateSpace.Page, CoordinateSpace.Device, PA );
+						//metafileGraphics.PageScale = 1f;
 
-					g.ReleaseHdc( hdc );
-					return metafile;
+						// output
+						this.Draw( metafileGraphics );
+
+						g.ReleaseHdc( hdc );
+						return metafile;
+					}
 				}
 			}
 		}
