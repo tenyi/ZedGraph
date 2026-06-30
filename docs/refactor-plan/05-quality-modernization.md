@@ -47,12 +47,12 @@
 | 編號 | 項目 | 範圍 | 可測性 | 狀態 |
 |------|------|------|--------|------|
 | **Part A — Coverage 衝刺** | | | | |
-| B5-A1 | XDate 系統性測試（擴充 `XDateConversionTests`） | `XDate.cs` | ✅ 高 | ⏳ 待辦 |
+| B5-A1 | XDate 系統性測試（新檔 `XDatePropertiesFormatTests`） | `XDate.cs` | ✅ 高 | ✅ 完成（`15fbf02`，測試 115→125） |
 | B5-A2 | Scale 全系列測試（Text/Log/Date/Ordinal/Exponent） | `Scale.cs` 各子類 | ✅ 中 | ⏳ 待辦 |
 | B5-A3 | ValueHandler 系統性測試（擴充 `ValueHandlerTests`） | `ValueHandler.cs` | ✅ 高 | ⏳ 待辦 |
 | B5-A4 | coverage 量測（FineCodeCoverage）與記錄 | — | — | ⏳ 待辦 |
 | **Part B — 現代化補強** | | | | |
-| B5-B1 (MOD-1) | `XDate.cs:1574-1605` 9 處 `IndexOf` 加 `StringComparison.Ordinal` | `XDate.cs` | ✅ 高（純重構） | ⏳ 待辦 |
+| B5-B1 (MOD-1) | `XDate.cs` ToString 12 處 `IndexOf` 加 `StringComparison.Ordinal` | `XDate.cs` | ✅ 高（純重構） | ✅ 完成（`3587803`，125 全綠） |
 | B5-B2 (MOD-2) | `LogScale.cs:402` `string.Format` → `ToString` | `LogScale.cs` | ✅ 高（純重構） | ⏳ 待辦 |
 | B5-B3 (MOD-3) | `SamplePointList` / `SampleMultiPointList` `ArrayList` → `List<T>` | 2 檔 | 🟡 中（架構級，待評估） | ⏳ 待辦 |
 | **Part C — 遺失項目** | | | | |
