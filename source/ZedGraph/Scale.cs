@@ -884,7 +884,10 @@ namespace ZedGraph
 
 			_isLabelsInside = info.GetBoolean( "isLabelsInside" );
 			_align = (AlignP)info.GetValue( "align", typeof( AlignP ) );
-			if ( schema >= 11 )
+			// B6-D (C8 fix): 用 sch（自 stream 讀出的版本）而非 class const schema 做版本判斷，
+			// 與同層 CurveItem.cs:293 的 convention 對齊。目前巧合正確（schema==sch==11），
+			// 改用 sch 才能在未來 bump 版本時正確做向後相容判斷。
+			if ( sch >= 11 )
 				_alignH = (AlignH)info.GetValue( "alignH", typeof( AlignH ) );
 
 			_fontSpec = (FontSpec)info.GetValue( "fontSpec", typeof( FontSpec ) );
