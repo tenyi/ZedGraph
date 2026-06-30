@@ -1,6 +1,6 @@
 //============================================================================
 //ZedGraph Class Library - A Flexible Line Graph/Bar Graph Library in C#
-//Copyright � 2004  John Champion
+//Copyright � 2004  John Champion
 //
 //This library is free software; you can redistribute it and/or
 //modify it under the terms of the GNU Lesser General Public
@@ -224,7 +224,9 @@ namespace ZedGraph
 		public override void GetObjectData( SerializationInfo info, StreamingContext context )
 		{
 			base.GetObjectData( info, context );
-			info.AddValue( "schema3", schema2 );
+			// B6-B-1 (C1 fix): 與 B3-1 StockPt 同型 — key 寫 "schema3" 但值用父類別 schema2。
+			// 巧合值皆為 10 所以無功能影響，但 source-level 應統一值來源。
+			info.AddValue( "schema3", schema3 );
 			info.AddValue( "size", _size );
 			info.AddValue( "isArrowHead", _isArrowHead );
 		}
