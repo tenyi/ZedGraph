@@ -69,13 +69,17 @@
 
 既有骨架：雙向轉換 sanity。擴充面向：
 
+> **2026-07-01 校正**：實際 API 與初版計畫假設不同——XDate **無** `Year/Month/Day/Hour/Minute/Second`
+> 獨立 property（這些經 `XLDateToCalendarDate` out params 取得）。實際 properties 僅：
+> `XLDate`、`IsValidDate`、`DateTime`、`JulianDay`、`DecimalYear`。下表已據此修正。
+
 | 測試面向 | 對應 method | 性質 |
 |----------|------------|------|
-| XLDate ↔ DateTime 雙向（含閏年、跨世紀） | `XDate(double)` / `DateTime` / `XLDateToDateTime` | 有意義 |
-| Julian Day 邊界（`JulDayMin` / `JulDayMax`） | `JulDayToXLDate` / `XLDateToJulianDay` | 有意義 |
-| 無效日期例外（NaN、範圍外、year<1） | 建構函式 | 有意義（例外） |
-| 格式化 token 解析（`[d][h][m][s][f]`） | `ToString(double, string)` | 有意義（與 B5-B1 相關） |
-| 取值器（Year/Month/Day/Hour/Minute/Second） | 各 getter | 有意義 |
+| XLDate ↔ DateTime 雙向（含閏年、跨世紀） | `XDate(double)` / `DateTime` / `XLDateToDateTime` | 有意義（既有骨架） |
+| Julian Day round-trip + 邊界 | `JulianDay` / `XLDateToJulianDay` / `JulDayToXLDate` | 有意義 |
+| DecimalYear 雙向 round-trip | `XLDateToDecimalYear` / `DecimalYearToXLDate` / `DecimalYear` | 有意義 |
+| `IsValidDate` / `MakeValidDate` 邊界截斷 | `IsValidDate` / `MakeValidDate` | 有意義 |
+| 格式化 token 解析（`[d][h][m][s][f]`） | `ToString(double, string)` | 🟡 文化依賴（內部 `DateTime.ToString` 用 current culture，測試須固定文化）；同時作 B5-B1 之 characterization |
 
 ### A2 — Scale 全系列測試
 
