@@ -443,6 +443,11 @@ namespace ZedGraph
 
 						if ( url != string.Empty )
 						{
+							// BUG FIX (H7): 對外部來源的 url 做 scheme 白名單驗證，
+							// 防止 file:///、javascript: 或任意 protocol handler 被觸發（CWE-601）。
+							if ( !Link.IsSafeUrl( url ) )
+								return;
+
 							System.Diagnostics.Process.Start( url );
 							// linkable objects override any other actions with mouse
 							return;
