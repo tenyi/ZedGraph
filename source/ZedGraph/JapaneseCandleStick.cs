@@ -1,6 +1,6 @@
 //============================================================================
 //ZedGraph Class Library - A Flexible Line Graph/Bar Graph Library in C#
-//Copyright � 2006  John Champion
+//Copyright � 2006  John Champion
 //
 //This library is free software; you can redistribute it and/or
 //modify it under the terms of the GNU Lesser General Public
@@ -253,7 +253,9 @@ namespace ZedGraph
 			_risingBorder = (Border)info.GetValue( "risingBorder", typeof( Border ) );
 			_fallingBorder = (Border)info.GetValue( "fallingBorder", typeof( Border ) );
 
-			if ( schema2 >= 11 )
+			// B6-D (C10 fix): 用 sch（自 stream 讀出的版本）而非 class const schema2 做版本判斷，
+			// 與 CurveItem.cs:293 的 convention 對齊。目前巧合正確（schema2==sch==11）。
+			if ( sch >= 11 )
 				_fallingColor = (Color) info.GetValue( "fallingColor", typeof( Color ) );
 		}
 		/// <summary>
