@@ -1,6 +1,6 @@
 //============================================================================
 //ZedGraph Class Library - A Flexible Line Graph/Bar Graph Library in C#
-//Copyright � 2004  John Champion
+//Copyright � 2004  John Champion
 //
 //This library is free software; you can redistribute it and/or
 //modify it under the terms of the GNU Lesser General Public
@@ -425,8 +425,11 @@ namespace ZedGraph
 
 			// For Overlay and Stack bars, the position is always zero since the bars are on top
 			// of eachother
+			// B6-C-2 (C7 fix): 補 SortedOverlay case。本方法 XML doc 第 386 行明指「intended
+			// only for SortedOverlay」，與 DrawBars (第 373-375 行) 列出的四個 case 對齊。
 			if ( pane._barSettings.Type == BarType.Overlay || pane._barSettings.Type == BarType.Stack ||
-					pane._barSettings.Type == BarType.PercentStack )
+					pane._barSettings.Type == BarType.PercentStack ||
+					pane._barSettings.Type == BarType.SortedOverlay )
 				pos = 0;
 
 			// Draw the specified bar
