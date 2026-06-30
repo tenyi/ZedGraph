@@ -1,6 +1,6 @@
 //============================================================================
 //ZedGraph Class Library - A Flexible Line Graph/Bar Graph Library in C#
-//Copyright � 2004  John Champion
+//Copyright � 2004  John Champion
 //
 //This library is free software; you can redistribute it and/or
 //modify it under the terms of the GNU Lesser General Public
@@ -1571,38 +1571,41 @@ namespace ZedGraph
 				fmtStr = fmtStr + " (BC)";
 			}
 
-			if ( fmtStr.IndexOf("[d]") >= 0 )
+			// B5-B1 (MOD-1)：格式化 token 為固定 ASCII 字面（[d][h][m][s][f]），
+			// 顯式指定 StringComparison.Ordinal 為序數比較的正確慣例（net18 上
+			// string.IndexOf(string) 預設為文化特性敏感）。對 ASCII token 行為等價。
+			if ( fmtStr.IndexOf( "[d]", StringComparison.Ordinal ) >= 0 )
 			{
 				fmtStr = fmtStr.Replace( "[d]", ((int) xlDate).ToString() );
 				xlDate -= (int) xlDate;
 			}
-			if ( fmtStr.IndexOf("[h]") >= 0 || fmtStr.IndexOf("[hh]") >= 0 )
+			if ( fmtStr.IndexOf( "[h]", StringComparison.Ordinal ) >= 0 || fmtStr.IndexOf( "[hh]", StringComparison.Ordinal ) >= 0 )
 			{
 				fmtStr = fmtStr.Replace( "[h]", ((int) (xlDate * 24)).ToString("d") );
 				fmtStr = fmtStr.Replace( "[hh]", ((int) (xlDate * 24)).ToString("d2") );
 				xlDate = ( xlDate * 24 - (int) (xlDate * 24) ) / 24.0;
 			}
-			if ( fmtStr.IndexOf("[m]") >= 0 || fmtStr.IndexOf("[mm]") >= 0 )
+			if ( fmtStr.IndexOf( "[m]", StringComparison.Ordinal ) >= 0 || fmtStr.IndexOf( "[mm]", StringComparison.Ordinal ) >= 0 )
 			{
 				fmtStr = fmtStr.Replace( "[m]", ((int) (xlDate * 1440)).ToString("d") );
 				fmtStr = fmtStr.Replace( "[mm]", ((int) (xlDate * 1440)).ToString("d2") );
 				xlDate = ( xlDate * 1440 - (int) (xlDate * 1440) ) / 1440.0;
 			}
-			if ( fmtStr.IndexOf("[s]") >= 0 || fmtStr.IndexOf("[ss]") >= 0 )
+			if ( fmtStr.IndexOf( "[s]", StringComparison.Ordinal ) >= 0 || fmtStr.IndexOf( "[ss]", StringComparison.Ordinal ) >= 0 )
 			{
 				fmtStr = fmtStr.Replace( "[s]", ((int) (xlDate * 86400)).ToString("d") );
 				fmtStr = fmtStr.Replace( "[ss]", ((int) (xlDate * 86400)).ToString("d2") );
 				xlDate = ( xlDate * 86400 - (int) (xlDate * 86400) ) / 86400.0;
 			}
-			if ( fmtStr.IndexOf("[f]") >= 0 )
+			if ( fmtStr.IndexOf( "[f]", StringComparison.Ordinal ) >= 0 )
 				fmtStr = fmtStr.Replace( "[f]", ((int) (xlDate * 864000)).ToString("d") );
-			if ( fmtStr.IndexOf("[ff]") >= 0 )
+			if ( fmtStr.IndexOf( "[ff]", StringComparison.Ordinal ) >= 0 )
 				fmtStr = fmtStr.Replace( "[ff]", ((int) (xlDate * 8640000)).ToString("d") );
-			if ( fmtStr.IndexOf("[fff]") >= 0 )
+			if ( fmtStr.IndexOf( "[fff]", StringComparison.Ordinal ) >= 0 )
 				fmtStr = fmtStr.Replace( "[fff]", ((int) (xlDate * 86400000)).ToString("d") );
-			if ( fmtStr.IndexOf("[ffff]") >= 0 )
+			if ( fmtStr.IndexOf( "[ffff]", StringComparison.Ordinal ) >= 0 )
 				fmtStr = fmtStr.Replace( "[ffff]", ((int) (xlDate * 864000000)).ToString("d") );
-			if ( fmtStr.IndexOf("[fffff]") >= 0 )
+			if ( fmtStr.IndexOf( "[fffff]", StringComparison.Ordinal ) >= 0 )
 				fmtStr = fmtStr.Replace( "[fffff]", ((int) (xlDate * 8640000000)).ToString("d") );
 
 			//DateTime dt = XLDateToDateTime( xlDate );
