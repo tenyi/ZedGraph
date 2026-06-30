@@ -5,3 +5,6 @@ obj/
 
 **/packages/*
 !**/packages/build/
+
+# 工具自動產生（Claude Code 等），非專案資產；為指向不入庫 CLAUDE.md 的 symlink
+/AGENTS.md
