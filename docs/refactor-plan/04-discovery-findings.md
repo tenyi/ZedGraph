@@ -6,6 +6,39 @@
 
 ---
 
+## ✅ 完工總覽（2026-07-01 更新）
+
+**12 個 actionable 候選全部修畢**，測試 **108 → 115 全綠**（+7）。
+
+| 編號 | commit | 修補內容 | 測試 |
+|------|--------|---------|------|
+| C2 | ec99952 | HiLowBarItem.GetObjectData 補寫 schema3 鍵 | round-trip ✅ |
+| C3 | b78d7c0 | GasGaugeRegion 鍵名 minVal/maxVal → minValue/maxValue | round-trip ✅ |
+| C5 | 0da7cdf | PointPair4 鍵 schema2 → schema3 | round-trip ✅ |
+| C1 | e1f3bdb | ArrowObj 值來源 schema2 → schema3 | 鍵護衛 ✅ |
+| C4 | 78ff659 | PointPairCV 值來源 schema2 → schema3 | 鍵護衛 ✅ |
+| C6 | 47913e5 | Axis.CalcCrossFraction 還原 min/max 對調 | reflection ✅（0.75→0.25） |
+| C7 | a54bcf7 | Bar.DrawSingleBar 補 SortedOverlay case | fix-only（pos 為內部局部變數，難測） |
+| C8 | 7672eb5 | Scale 版本判斷 schema → sch | fix-only（無法從外部區分） |
+| C9 | 12ae775 | Legend 版本判斷 schema → sch（兩處） | fix-only |
+| C10 | 41b58b8 | JapaneseCandleStick 版本判斷 schema2 → sch | fix-only |
+| C11 | e0889ba | PolyObj 版本判斷 schema3 → sch | fix-only |
+| C12 | adfd52a | FillType.GradientByY XML 註解 Z→Y | doc-only |
+
+**test commits**：c5d1783（Phase A 紅測試）、5bb50a7（Phase B 護衛測試）、0830d6e（Phase C 紅測試）
+
+### 測試守護策略分層
+- **可重現失敗 → regression test**（TDD red→green）：C2/C3/C5（round-trip 拋例外）、C6（frac 值 0.75→0.25）
+- **鍵名護衛**（守住「不能改更糟」）：C1/C4（schema3 鍵存在，值來源靠 review）
+- **fix-only + code review 守護**：C7（pos 為方法內部局部變數）、C8~C11（schema const vs sch 巧合同值，無法從外部測）
+- **doc-only**：C12（純 XML 註解）
+
+### 觀察類（§1.3）不進實作，保留記錄
+- O1~O4（風格 / 文件）：不動
+- O5/O6（架構級，Fill/FontSpec setter Dispose）：併入 `02` 之 `H1-A 完整版` 藍圖
+
+---
+
 ## 0. 掃描方法
 
 | 維度 | 範圍 | 信心度門檻 |
