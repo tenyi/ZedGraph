@@ -1,6 +1,6 @@
 //============================================================================
 //ZedGraph Class Library - A Flexible Line Graph/Bar Graph Library in C#
-//Copyright � 2004  John Champion
+//Copyright � 2004  John Champion
 //
 //This library is free software; you can redistribute it and/or
 //modify it under the terms of the GNU Lesser General Public
@@ -19,6 +19,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
@@ -601,9 +602,18 @@ namespace ZedGraph
 
 				base.OnPaint( e );
 
-				// Add a try/catch pair since the users of the control can't catch this one
+				// BUG FIX (H3.2): OnPaint 內 _masterPane.Draw 的 try-catch 原本為空 catch。
+				// 此例外吞噬為刻意設計——它是 WinForms 控制項渲染的「最後防線」，
+				// 控制項的使用者無法攔截 OnPaint 內拋出的例外（Paint 事件由 WinForms 訊息
+				// 迴圈觸發，不在 try/catch 內），若不吞掉則單次繪圖例外會讓整個 AppDomain
+				// 顯示損毀。保留「吞例外」契約，但改為透過 Debug.WriteLine 輸出，
+				// 方便日後診斷而不改變外部行為。
 				try { _masterPane.Draw( e.Graphics ); }
-				catch { }
+				catch ( Exception ex )
+				{
+					System.Diagnostics.Debug.WriteLine(
+						$"ZedGraph.ZedGraphControl.OnPaint swallowed exception: {ex.GetType().Name}: {ex.Message}" );
+				}
 			}
 
 /*
