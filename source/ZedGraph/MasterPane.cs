@@ -400,9 +400,15 @@ namespace ZedGraph
 		/// <param name="sender"></param>
 		public void OnDeserialization(object sender)
 		{
-			Bitmap bitmap = new Bitmap( 10, 10 );
-			Graphics g = Graphics.FromImage( bitmap );
-			ReSize( g, _rect );
+			// M10 修復：原 Bitmap 與 Graphics 在 ReSize 結束後失去引用而洩漏 GDI+ handle。
+			// 改為巢狀 using-statement，依「先 Graphics、後 Bitmap」順序釋放（Graphics 引用 Bitmap）。
+			using ( Bitmap bitmap = new Bitmap( 10, 10 ) )
+			{
+				using ( Graphics g = Graphics.FromImage( bitmap ) )
+				{
+					ReSize( g, _rect );
+				}
+			}
 		}
 	#endregion
 

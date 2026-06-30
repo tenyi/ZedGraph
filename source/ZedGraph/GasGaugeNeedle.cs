@@ -1,6 +1,6 @@
 //============================================================================
 //GasGaugeNeedle Class
-//Copyright � 2006 Jay Mistry
+//Copyright � 2006 Jay Mistry
 //
 //This library is free software; you can redistribute it and/or
 //modify it under the terms of the GNU Lesser General Public
@@ -425,19 +425,28 @@ namespace ZedGraph
 
 					matrix.TransformPoints( pts );
 
-					Pen p = new Pen( NeedleColor, ( ( tRect.Height * .10f ) / 2.0f ) );
-					p.EndCap = LineCap.ArrowAnchor;
-					g.DrawLine( p, pts[0].X, pts[0].Y, pts[1].X, pts[1].Y );
+					// M10 修復：以下三個 GDI+ 資源（Pen/Brush/Pen）原本在 if 結束時失去引用而洩漏。
+					// 改用 using-statement 確保例外路徑與正常路徑皆會 Dispose，
+					// 縮小 GDI+ handle 生命週期至此渲染區塊結束。行為不變（characterization 測試守護）。
+					using ( Pen p = new Pen( NeedleColor, ( ( tRect.Height * .10f ) / 2.0f ) ) )
+					{
+						p.EndCap = LineCap.ArrowAnchor;
+						g.DrawLine( p, pts[0].X, pts[0].Y, pts[1].X, pts[1].Y );
+					}
 
 					//Fill center 10% with Black dot;
 					Fill f = new Fill( Color.Black );
 					RectangleF r = new RectangleF( ( tRect.X + ( tRect.Width / 2 ) ) - 1.0f, ( tRect.Y + ( tRect.Height / 2 ) ) - 1.0f, 1.0f, 1.0f );
 					r.Inflate( ( tRect.Height * .10f ), ( tRect.Height * .10f ) );
-					Brush b = f.MakeBrush( r );
-					g.FillPie( b, r.X, r.Y, r.Width, r.Height, 0.0f, -180.0f );
+					using ( Brush b = f.MakeBrush( r ) )
+					{
+						g.FillPie( b, r.X, r.Y, r.Width, r.Height, 0.0f, -180.0f );
+					}
 
-					Pen borderPen = new Pen( Color.White, 2.0f );
-					g.DrawPie( borderPen, r.X, r.Y, r.Width, r.Height, 0.0f, -180.0f );
+					using ( Pen borderPen = new Pen( Color.White, 2.0f ) )
+					{
+						g.DrawPie( borderPen, r.X, r.Y, r.Width, r.Height, 0.0f, -180.0f );
+					}
 
 					g.SmoothingMode = sMode;
 				}
@@ -469,11 +478,14 @@ namespace ZedGraph
 
 			float yMid = rect.Top + rect.Height / 2.0F;
 
-			Pen pen = new Pen( NeedleColor, pane.ScaledPenWidth( NeedleWidth / 2, scaleFactor ) );
-			pen.StartCap = LineCap.Round;
-			pen.EndCap = LineCap.ArrowAnchor;
-			pen.DashStyle = DashStyle.Solid;
-			g.DrawLine( pen, rect.Left, yMid, rect.Right, yMid );
+			// M10 修復：Pen 改為 using-statement，確保 Dispose。
+			using ( Pen pen = new Pen( NeedleColor, pane.ScaledPenWidth( NeedleWidth / 2, scaleFactor ) ) )
+			{
+				pen.StartCap = LineCap.Round;
+				pen.EndCap = LineCap.ArrowAnchor;
+				pen.DashStyle = DashStyle.Solid;
+				g.DrawLine( pen, rect.Left, yMid, rect.Right, yMid );
+			}
 		}
 
 		/// <summary>
