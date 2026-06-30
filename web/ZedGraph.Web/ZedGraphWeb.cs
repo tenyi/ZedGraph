@@ -27,6 +27,7 @@ using System.Drawing.Drawing2D;
 using System.IO;
 using System.Collections;
 using ZedGraph;
+using System.Web;
 
 [assembly: TagPrefix( "ZedGraph", "zgw" )]
 
@@ -980,7 +981,10 @@ namespace ZedGraph.Web
 				RenderModeType retVal = RenderModeType.ImageTag;
 				try
 				{
-					retVal = (RenderModeType)RenderModeType.Parse( typeof( RenderModeType ), ViewState["RenderMode"].ToString() );
+					// BUG FIX (C3): RenderModeType 是 enum，沒有 Parse 靜態方法。
+					// 原 code 用 RenderModeType.Parse(typeof(RenderModeType), ...) 會編譯失敗或永遠走 catch。
+					// 改為 System.Enum.Parse 是正確 API。
+					retVal = (RenderModeType)System.Enum.Parse( typeof( RenderModeType ), ViewState["RenderMode"].ToString() );
 				}
 				catch ( System.Exception )
 				{
@@ -1757,15 +1761,20 @@ namespace ZedGraph.Web
 
 			if ( url != string.Empty )
 			{
+				// BUG FIX (C4): HtmlTextWriter.AddAttribute 不會自動編碼任意字串，
+				// 原 code 把 tag 物件 ToString() 直接串接到 URL 造成反射型 XSS。
+				// 改用 Uri.EscapeDataString 對 URL 與 tag 編碼。
+				string safeUrl = Uri.EscapeDataString( url );
 				if ( tag is string )
-					output.AddAttribute( HtmlTextWriterAttribute.Href, url + "&" + tag );
+					output.AddAttribute( HtmlTextWriterAttribute.Href, safeUrl + "&" + Uri.EscapeDataString( (string)tag ) );
 				else
-					output.AddAttribute( HtmlTextWriterAttribute.Href, url );
+					output.AddAttribute( HtmlTextWriterAttribute.Href, safeUrl );
 			}
+			// BUG FIX (C4): target 與 title 屬性值也需 HTML 屬性編碼。
 			if ( target != string.Empty && url != string.Empty )
-				output.AddAttribute( HtmlTextWriterAttribute.Target, target );
+				output.AddAttribute( HtmlTextWriterAttribute.Target, HttpUtility.HtmlAttributeEncode( target ) );
 			if ( title != string.Empty )
-				output.AddAttribute( HtmlTextWriterAttribute.Title, title );
+				output.AddAttribute( HtmlTextWriterAttribute.Title, HttpUtility.HtmlAttributeEncode( title ) );
 
 			output.RenderBeginTag( HtmlTextWriterTag.Area );
 			//output.Write( "Here's some random text" );

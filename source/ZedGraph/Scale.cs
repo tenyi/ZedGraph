@@ -1,6 +1,6 @@
 //============================================================================
 //ZedGraph Class Library - A Flexible Line Graph/Bar Graph Library in C#
-//Copyright � 2004  John Champion
+//Copyright � 2004  John Champion
 //
 //This library is free software; you can redistribute it and/or
 //modify it under the terms of the GNU Lesser General Public
@@ -2543,9 +2543,11 @@ namespace ZedGraph
 			// set the scale magnitude if required
 			if (this._magAuto)
 			{
-				// Find the optimal scale display multiple
-				double minMag = Math.Floor(Math.Log10(Math.Abs(this._min)));
-				double maxMag = Math.Floor(Math.Log10(Math.Abs(this._max)));
+				// BUG FIX (C2): 防止 _min 或 _max 為 0 時 Math.Log10(0) 產生 -Infinity 污染 _mag。
+				// 原 code 對 0 邊界會將 _mag 設為 int.MinValue，後續 ToString("f"+負巨大值) 丟 FormatException。
+				// 修正：當 _min 或 _max 為 0 時將其 Log10 值視為 0（與「無 magnitude」語意一致）。
+				double minMag = this._min != 0.0 ? Math.Floor(Math.Log10(Math.Abs(this._min))) : 0.0;
+				double maxMag = this._max != 0.0 ? Math.Floor(Math.Log10(Math.Abs(this._max))) : 0.0;
 
 				double mag = Math.Max(maxMag, minMag);
 

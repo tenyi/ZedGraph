@@ -1,6 +1,6 @@
 //============================================================================
 //ZedGraph Class Library - A Flexible Line Graph/Bar Graph Library in C#
-//Copyright � 2006  John Champion
+//Copyright � 2006  John Champion
 //
 //This library is free software; you can redistribute it and/or
 //modify it under the terms of the GNU Lesser General Public
@@ -169,8 +169,11 @@ namespace ZedGraph
 		{
 			base.GetObjectData( info, context );
 
-			info.AddValue( "schema3", schema2 );
-			info.AddValue( "isOmitMag", _isVisible );
+			// BUG FIX (C1): 修正序列化欄位錯位
+			// - 原 code 寫 "schema3" 但 value 用 schema2 → 改為一致使用 schema3
+			// - 原 code 寫 "isOmitMag" 但 value 用 _isVisible（父類別欄位）→ 改為正確的 _isOmitMag
+			info.AddValue( "schema3", schema3 );
+			info.AddValue( "isOmitMag", _isOmitMag );
 			info.AddValue( "isTitleAtCross", _isTitleAtCross );
 		}
 		#endregion

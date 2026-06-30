@@ -1,6 +1,6 @@
 //============================================================================
 //ZedGraph Class Library - A Flexible Line Graph/Bar Graph Library in C#
-//Copyright � 2007  John Champion
+//Copyright � 2007  John Champion
 //
 //This library is free software; you can redistribute it and/or
 //modify it under the terms of the GNU Lesser General Public
@@ -714,6 +714,15 @@ namespace ZedGraph
 					if ( nearestObj is CurveItem && iPt >= 0 )
 					{
 						CurveItem curve = (CurveItem)nearestObj;
+						// BUG FIX (C5): 防護自訂 IPointList 回傳 null 或 iPt 越界導致 NRE。
+						// 隱藏曲線已被深層 FindNearestPoint 過濾（GraphPane.cs line 2075），
+						// 此處補上 Points null 與 iPt 越界防護。
+						if ( curve.Points == null || iPt >= curve.Points.Count )
+						{
+							this.DisableToolTip();
+							return mousePt;
+						}
+
 						// Provide Callback for User to customize the tooltips
 						if ( this.PointValueEvent != null )
 						{
@@ -737,8 +746,10 @@ namespace ZedGraph
 							{
 								PointPair pt = curve.Points[iPt];
 
-								if ( pt.Tag is string )
-									this.SetToolTip((string)pt.Tag, mousePt);
+								// BUG FIX (C5): 改用 as string 取代 (string) 強轉，避免自訂 Tag 物件類型時丟 InvalidCastException。
+								string tagStr = pt.Tag as string;
+								if ( tagStr != null )
+									this.SetToolTip(tagStr, mousePt);
 								else
 								{
 									double xVal, yVal, lowVal;

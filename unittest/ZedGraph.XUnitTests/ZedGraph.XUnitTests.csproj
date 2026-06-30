@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- 對齊核心 ZedGraph.csproj 的 net481target。 -->
+    <TargetFramework>net48</TargetFramework>
+    <!-- xUnit v3 測試專案必須是 Exe（v3 重大變更：測試執行檔獨立）。 -->
+    <OutputType>Exe</OutputType>
+    <RootNamespace>ZedGraph.XUnitTests</RootNamespace>
+    <AssemblyName>ZedGraph.XUnitTests</AssemblyName>
+
+    <!-- 4.8 需要 Windows Forms 與 GDI+（繪圖函式庫測試需要）。 -->
+    <UseWindowsForms>true</UseWindowsForms>
+
+    <!-- 啟用 nullable 對齊 .NET 8 風格；.NET 4.8 編譯時可忽略。 -->
+    <Nullable>disable</Nullable>
+
+    <!-- .NET 4.8 SDK 預設 C# 7.3，升級到 8.0 以支援 using 宣告、switch expression、nullable reference types 等。 -->
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- 對齊核心 ZedGraph 專案。 -->
+    <ProjectReference Include="..\..\source\ZedGraph\ZedGraph.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- C4 防護：測試 .NET Framework 內建的 HTML 編碼 API 契約（HttpUtility.HtmlAttributeEncode）。 -->
+    <Reference Include="System.Web" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- xUnit v3 核心：3.2.2 為目前 stable。 -->
+    <PackageReference Include="xunit.v3" Version="3.2.2" />
+    <!-- 測試 SDK（net48 相容）。 -->
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.7.0" />
+    <!-- VS Test Explorer / dotnet test 整合。 -->
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <!-- 涵蓋率（v3 相容）。 -->
+    <PackageReference Include="coverlet.collector" Version="10.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>
