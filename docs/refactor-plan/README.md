@@ -39,7 +39,7 @@
 | **Batch 2** | 02-high-safety-resource.md | 安全性 + 資源管理（H1,H3,H4,H7–H9, M10,M12–M14, L5） | ~12 | Batch 0 (T0.3) | `- [ ]` *(待產)* |
 | **Batch 3** | 03-correctness-cleanup.md | 死碼清理 + 正確性防護（H2,H5, M8,M9,M11） | ~8 | Batch 0 (T0.3) | `- [ ]` *(待產)* |
 | **Batch 4** | 04-performance.md | 效能熱路徑（H6, M1–M7） | ~10 | Batch 0 (T0.3) | `- [ ]` *(待產)* |
-| **Batch 5** | 05-quality-modernization.md | 品質/現代化/測試衝刺（L1–L4,L6, 現代化, coverage≥30%） | ~12 | Batch 0–4 | `- [ ]` *(待產)* |
+| **Batch 5** | [05-quality-modernization.md](./05-quality-modernization.md) | 品質/現代化/測試衝刺（coverage 衝刺 + MOD-1~3 現代化；L1–L6 遺失待補） | ~12 | Batch 0–4 | `- [ ]` *(已產生)* |
 
 > **解鎖關係（細粒度）**：Batch 0 不必整批做完才能動後續。
 > `T0.2`（Critical failing tests）完成即可開工 Batch 1；
@@ -123,5 +123,5 @@ docs/refactor-plan/
 ├── 02-high-safety-resource.md   # Batch 2：安全 + 資源（待產）
 ├── 03-correctness-cleanup.md    # Batch 3：死碼 + 正確性（待產）
 ├── 04-performance.md            # Batch 4：效能（待產）
-└── 05-quality-modernization.md  # Batch 5：品質/現代化（待產）
+└── 05-quality-modernization.md  # Batch 5：品質/現代化（已產生）
 ```
