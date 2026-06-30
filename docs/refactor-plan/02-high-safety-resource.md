@@ -16,7 +16,8 @@
 | H7 | Process.Start 無 scheme 白名單 | `ZedGraphControl.Events.cs:446` | ✅ 高 | ✅ **完成** |
 | H8 | ~~ImageObj Path Traversal~~ | — | — | ❌ **已確認誤判，移除** |
 | H9 | ViewState Activator 無型別限制 | `ZedGraphWebTools.cs`（7 處） | 🔴 低（web） | ⏳ 待辦（web） |
-| M10–M11 | Dispose 模式 / 核心 stream | — | — | ⏳ 待定位 |
+| M10 | GasGaugeNeedle 與 MasterPane.OnDeserialization 6 處局部 GDI+ 洩漏 | `GasGaugeNeedle.cs:428/436/439/472`、`MasterPane.cs:403-404` | ✅ 高 | ✅ **完成** |
+| M11 | ⚠️ 屬 Batch 3（原始計畫分類錯誤：見 README.md:40） | — | — | ⏳ 已轉交 Batch 3 |
 | M12 | `GetMetafile` MemoryStream 未 Dispose | `PaneBase.cs:974, 1027` | ✅ 高 | ✅ **完成** |
 | M13 | RenderedImagePath | `web/ZedGraph.Web/ZedGraphWeb.cs` | 🔴 低（web-only） | ⏳ 待辦（**web 路徑**） |
 | M14 | TempFileDestructor | `web/ZedGraph.Web/TempFileDestructor.cs` | 🔴 低（web-only） | ⏳ 待辦（**web 路徑**） |
@@ -103,15 +104,18 @@
 - [x] **H3.2** `ZedGraphControl.cs:606` 空 catch 改為 Debug 記錄（契約保留）
 - [x] **H8** 確認為誤判（ImageObj 不從路徑載入），已移除
 - [x] **M12** `PaneBase.GetMetafile` MemoryStream 改為 using（2 個 characterization 測試）
+- [x] **M10** GasGaugeNeedle + MasterPane.OnDeserialization 6 處 GDI+ 洩漏改為 using-statement
+- [x] **M11** 從本計畫移除（已轉交 Batch 3）
 - [x] **M13/M14** 確認位於 web 專案，標註為「獨立 web 路徑」
 
 ### 待辦（區分範圍）
 - [ ] **H1** Fill/Brush GDI+ 洩漏（大重構，獨立評估）
 - [ ] **H4** stack 寫入 HTML（web）
 - [ ] **H9** ViewState Activator 反序列化（web，7 處）
-- [ ] **M10/M11** Dispose 模式 / 核心 stream 細項（待定位）
+- [x] **M10** GasGaugeNeedle + MasterPane.OnDeserialization 共 6 處 GDI+ 洩漏改為 using-statement（3 個 characterization 測試）
+- [ ] **M11** 已轉交 Batch 3 處理（原始定義待 Batch 3 啟動時重定位）
 - [ ] **L5** BinaryFormatter（範例專案，低優先）
 
 ### 測試狀態
-- [x] `dotnet test` 全綠（**96 個測試**全通過；H7 加入後 94 → M12 加入後 96）
-- [x] M12 獨立 commit、H3.1 獨立 commit、H3.2 獨立 commit（H7 先前已完成）
+- [x] `dotnet test` 全綠（**102 個測試**全通過；M10 加入後 99 → 102）
+- [x] M10 獨立 commit、M12 / H3.1 / H3.2 / H7 已先 commit
