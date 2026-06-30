@@ -10,7 +10,7 @@
 
 | 編號 | 問題 | 位置（class/method） | 可測性 | 狀態 |
 |------|------|----------------------|--------|------|
-| H1 | Fill 持 GDI+ Brush 未 Dispose，缺 IDisposable | `Fill._brush` (Fill.cs:62) | 中（大重構，影響呼叫端） | ⏳ 待辦 |
+| H1 | Fill 持 GDI+ Brush 未 Dispose，缺 IDisposable | `Fill.cs`（介面/setter/Dispose） | 中（C 方案，不動 caller） | ✅ **完成**（C 方案） |
 | H3 | 空 catch 吞例外 | `Line.cs:1154`、`ZedGraphControl.cs:606` | 中（契約式 catch，行為不變） | ✅ **完成**（H3.1 + H3.2） |
 | H4 | stack 寫入 HTML | web（待定位） | 🔴 低（web 不可直接測） | ⏳ 待定位 |
 | H7 | Process.Start 無 scheme 白名單 | `ZedGraphControl.Events.cs:446` | ✅ 高 | ✅ **完成** |
@@ -42,11 +42,30 @@
 
 ## 待辦項目細節
 
-### H1 — Fill/Brush GDI+ 洩漏（大重構，獨立評估）
+### H1 — Fill/Brush GDI+ 洩漏（架構級 → 採 C 方案 ✅）
 - **問題**：`Fill._brush`（TextureBrush / LinearGradientBrush）為 GDI+ 資源，但 `Fill` 與整個核心專案**未實作 IDisposable**，Brush 永不顯式 Dispose → handle 洩漏。
-- **範圍**：可能擴及 `FontSpec`（Font）、`Pen` 等所有持有 GDI+ 資源的類別。
-- **風險**：實作 IDisposable 會改變所有呼叫端的物件生命週期（需 using 或 Dispose），屬**架構級變更**，不適合與其他小修混做。
-- **建議**：獨立子批次，先 characterization 鎖定 Fill 現有 Draw 行為，再評估 IDisposable 導入範圍。
+- **最初評估（A 方案）**：在 `Fill` 與所有 owner（11 個 instance Fill owner + `PaneBase` 基底）實作 `IDisposable` 鏈 → **變動面 12+ classes**，估 ~15 commit。
+- **重新評估（C 方案，最終採行）**：限定在 `Fill.cs` 自身，不動任何 caller：
+  - Fill 加 `IDisposable`，`Dispose()` 釋放 `_brush` / `_gradientBM`。
+  - `_disposed` 旗標防重複 Dispose。
+  - `Brush` 屬性 setter 重複指派時自動 Dispose 舊值——這是主要修補場景。
+  - **不寫 finalizer**：`Brush`/`Bitmap`/`Image` 為 SafeHandle，GC 自然回收；寫 finalizer 反而引 finalization queue 成本救不回幾個 handle。
+  - **不釋放 `_image`**：序列化專用欄位，caller 端負責，避免雙 Dispose。
+- **A 方案設計藍圖保留**（供未來 N 個 commit 後的重啟使用）：
+  14 個 owner 清單已記錄：`Chart`、`BoxObj`、`LineBase`、`Bar`、`Line`、`PieItem`、`Legend`、`GasGaugeRegion`、`GasGaugeNeedle`、`JapaneseCandleStick`、`FontSpec`、`Selection`、`PaneBase`（基底）、`Symbol`。
+
+#### H1 變動面
+| 檔案 | 變更 |
+|------|------|
+| `source/ZedGraph/Fill.cs` | 介面加 IDisposable、加 `_disposed`、Brush setter 重複 Dispose、加 `#region IDisposable` 的 `Dispose()` 方法 |
+
+#### H1 測試
+| 測試 ID | 範圍 | 狀態 |
+|---------|------|------|
+| T-H1.c.a | Fill 實作 IDisposable，重複 Dispose 不拋例外 | ✅ |
+| T-H1.c.b | Brush setter 重複指派，最終持有的物件是後者 | ✅ |
+| T-H1.c.c | Dispose 後純資料屬性（Color、Type）仍可讀 | ✅ |
+| T-H1.c.d | Clone 後兩個 Fill 各自可獨立 Dispose | ✅ |
 
 ### H3 — 空 catch ✅
 - **位置**：`Line.cs:1154`（`InterpolatePoint` 最外層 `catch { }`）、`ZedGraphControl.cs:606`（`OnPaint` 內 `_masterPane.Draw` 外層 `catch { }`）
@@ -103,19 +122,18 @@
 - [x] **H3.1** `Line.cs:1154` 空 catch 改為 Debug 記錄（契約保留）
 - [x] **H3.2** `ZedGraphControl.cs:606` 空 catch 改為 Debug 記錄（契約保留）
 - [x] **H8** 確認為誤判（ImageObj 不從路徑載入），已移除
-- [x] **M12** `PaneBase.GetMetafile` MemoryStream 改為 using（2 個 characterization 測試）
-- [x] **M10** GasGaugeNeedle + MasterPane.OnDeserialization 6 處 GDI+ 洩漏改為 using-statement
+- [x] **H1** Fill 實作 IDisposable + Brush setter 重複 Dispose（C 方案，4 個 characterization 測試）
+- [x] **M10** GasGaugeNeedle + MasterPane.OnDeserialization 共 6 處 GDI+ 洩漏改為 using-statement（3 個 characterization 測試）
 - [x] **M11** 從本計畫移除（已轉交 Batch 3）
+- [x] **M12** `PaneBase.GetMetafile` MemoryStream 改為 using（2 個 characterization 測試）
 - [x] **M13/M14** 確認位於 web 專案，標註為「獨立 web 路徑」
 
 ### 待辦（區分範圍）
-- [ ] **H1** Fill/Brush GDI+ 洩漏（大重構，獨立評估）
+- [ ] **H1-A 完整版**（未來重啟用）：14 個 owner 鋪 Dispose 鏈（見 H1 細節段藍圖）
 - [ ] **H4** stack 寫入 HTML（web）
 - [ ] **H9** ViewState Activator 反序列化（web，7 處）
-- [x] **M10** GasGaugeNeedle + MasterPane.OnDeserialization 共 6 處 GDI+ 洩漏改為 using-statement（3 個 characterization 測試）
-- [ ] **M11** 已轉交 Batch 3 處理（原始定義待 Batch 3 啟動時重定位）
 - [ ] **L5** BinaryFormatter（範例專案，低優先）
 
 ### 測試狀態
-- [x] `dotnet test` 全綠（**102 個測試**全通過；M10 加入後 99 → 102）
-- [x] M10 獨立 commit、M12 / H3.1 / H3.2 / H7 已先 commit
+- [x] `dotnet test` 全綠（**106 個測試**全通過；H1 加入後 102 → 106）
+- [x] H1 獨立三 commit（test + product + plan）；M10 / M12 / H3.1 / H3.2 / H7 已先 commit
