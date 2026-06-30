@@ -1,6 +1,6 @@
 //============================================================================
 //ZedGraph Class Library - A Flexible Line Graph/Bar Graph Library in C#
-//Copyright � 2004  John Champion
+//Copyright � 2004  John Champion
 //
 //This library is free software; you can redistribute it and/or
 //modify it under the terms of the GNU Lesser General Public
@@ -978,8 +978,11 @@ namespace ZedGraph
 			// as part of CalcRect() before scale is fully setup
 			//			double max = crossAxis._scale._maxLinTemp;
 			//			double min = crossAxis._scale._minLinTemp;
-			double max = crossAxis._scale.Linearize( crossAxis._scale._min );
-			double min = crossAxis._scale.Linearize( crossAxis._scale._max );
+			// B6-C-1 (C6 fix): 原本 min/max 變數與 _min/_max 來源對調（與同檔
+			// EffectiveCrossValue 第 908-909 行相反），導致 (max-min) 變號、
+			// 兩個計算分支行為互換，軸交叉位置方向反相。還原為 min←_min / max←_max。
+			double min = crossAxis._scale.Linearize( crossAxis._scale._min );
+			double max = crossAxis._scale.Linearize( crossAxis._scale._max );
 			float frac;
 
 			if ( ( ( this is XAxis || this is YAxis ) && _scale._isLabelsInside == crossAxis._scale.IsReverse ) ||
