@@ -1,6 +1,6 @@
 //============================================================================
 //ZedGraph Class Library - A Flexible Line Graph/Bar Graph Library in C#
-//Copyright © 2004  John Champion
+//Copyright ï¿½ 2004  John Champion
 //
 //This library is free software; you can redistribute it and/or
 //modify it under the terms of the GNU Lesser General Public
@@ -103,8 +103,8 @@ namespace ZedGraph
 		/// <seealso cref="Fill.RangeDefault"/>
 		GradientByX,
 		/// <summary>
-		/// Fill with a single solid color based on the Z value of the data.</summary>
-		/// <remarks>The Z value is
+		/// Fill with a single solid color based on the Y value of the data.</summary>
+		/// <remarks>The Y value is
 		/// used to determine the color value based on a gradient brush, and using a data range
 		/// of <see cref="Fill.RangeMin"/> and <see cref="Fill.RangeMax"/>.  You can create a multicolor
 		/// range by initializing the <see cref="Fill"/> class with your own custom
