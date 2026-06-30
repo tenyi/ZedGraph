@@ -1,6 +1,6 @@
 //============================================================================
 //GasGaugeRegion Class
-//Copyright � 2006 Jay Mistry
+//Copyright � 2006 Jay Mistry
 //
 //This library is free software; you can redistribute it and/or
 //modify it under the terms of the GNU Lesser General Public
@@ -140,8 +140,11 @@ namespace ZedGraph
 			info.AddValue( "fill", _fill );
 			info.AddValue( "color", _color );
 			info.AddValue( "border", _border );
-			info.AddValue( "minVal", _minValue );
-			info.AddValue( "maxVal", _maxValue );
+			// B6-A-2 (C3 fix): 讀端第 121-122 行 GetDouble("minValue" / "maxValue")，
+			// 寫端原本用 "minVal" / "maxVal" 鍵 → round-trip 拋 SerializationException
+			// 或 fallback 到 0.0。改為與讀端對齊的 "minValue" / "maxValue"。
+			info.AddValue( "minValue", _minValue );
+			info.AddValue( "maxValue", _maxValue );
 			info.AddValue( "startAngle", _startAngle );
 			info.AddValue( "sweepAngle", _sweepAngle );
 			info.AddValue( "boundingRectangle", _boundingRectangle );
