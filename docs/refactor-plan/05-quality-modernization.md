@@ -54,7 +54,7 @@
 | **Part B — 現代化補強** | | | | |
 | B5-B1 (MOD-1) | `XDate.cs` ToString 12 處 `IndexOf` 加 `StringComparison.Ordinal` | `XDate.cs` | ✅ 高（純重構） | ✅ 完成（`3587803`，125 全綠） |
 | B5-B2 (MOD-2) | `LogScale.cs` MakeLabel `string.Format` → `ToString` | `LogScale.cs` | ✅ 高（純重構） | ✅ 完成（`538d3f1`，125 全綠；cosmetic 未寫專屬測試） |
-| B5-B3 (MOD-3) | `SamplePointList` / `SampleMultiPointList` `ArrayList` → `List<T>` | 2 檔 | 🟡 中（架構級，待評估） | ⏳ 待辦 |
+| B5-B3 (MOD-3) | `SamplePointList` / `SampleMultiPointList` `ArrayList` → `List<T>` | 2 檔 | 🟢 低（非序列化、固定型別、可控） | 🔍 評估完成，待裁示 |
 | **Part C — 遺失項目** | | | | |
 | L1–L4/L6 | 原始明細遺失 | — | — | ⏳ 待使用者補 |
 
@@ -148,13 +148,15 @@ return string.Format( "{0:F0}", dVal );   // → return dVal.ToString( "F0" );
 - `source\ZedGraph\SamplePointList.cs:85,177`（`private ArrayList list;`）
 - `source\ZedGraph\SampleMultiPointList.cs:174`（`DataCollection = new ArrayList();`）
 
-**評估**：
-- `SamplePointList` / `SampleMultiPointList` 為 `IPointList` 範例實作（非渲染熱路徑）。
-- 改 `List<T>` 涉及型別參數確認、序列化相容、下游 `foreach` 行為。
-- **風險中等**，需完整 characterization test 護航。
-- **建議**：若評估顯示變更面過大，則標註「保留 ArrayList 以維持序列化相容」不修。
+**2026-07-01 評估結果**：
+- 兩者皆 `public class … : IPointList`，**非 ISerializable**（無 GetObjectData）→ **無序列化相容風險**。
+- `SamplePointList.list` 存固定型別 `Sample`；`SampleMultiPointList.DataCollection` 存 `PerformanceData`。
+- 下游用法：索引 + cast（`(Sample)list[index]`）、`Add`/`RemoveAt`/`Insert`/`Count`。
+- **變更面**：欄位型別 + `new` + 移除多餘 cast（純型別安全改善），可控、風險低。
+- **但**：兩者為 IPointList「範例」實作（教學性質），非渲染熱路徑，現代化收益有限。
+- **結論**：變更面可控、風險低，但範例類別之型別安全改善價值有限。暫標「評估完成」，**修與否待使用者裁示**（非 bug，純風格現代化）。
 
-**範圍**：2 檔 + characterization test。
+**範圍（若修）**：2 檔（`SamplePointList.cs`、`SampleMultiPointList.cs`）+ characterization test。
 
 ### MOD-NRT — 可空參考型別（不建議本批次）
 
