@@ -48,7 +48,7 @@
 |------|------|------|--------|------|
 | **Part A — Coverage 衝刺** | | | | |
 | B5-A1 | XDate 系統性測試（新檔 `XDatePropertiesFormatTests`） | `XDate.cs` | ✅ 高 | ✅ 完成（`15fbf02`，測試 115→125） |
-| B5-A2 | Scale 全系列測試（Text/Log/Date/Ordinal/Exponent） | `Scale.cs` 各子類 | ✅ 中 | ⏳ 待辦 |
+| B5-A2 | Scale 全系列測試（分塊進行中） | `Scale.cs` 各子類 | ✅ 中 | 🟡 第一塊 LogScale 完成（測試 134）；其餘待續 |
 | B5-A3 | ValueHandler BarCenterValue 測試 + A3 面向校正（無 NearestPoint/DataRange） | `ValueHandler.cs` | ✅ 高 | ✅ 完成（126 全綠） |
 | B5-A4 | coverage 量測（FineCodeCoverage）與記錄 | — | — | ⏳ 待辦 |
 | **Part B — 現代化補強** | | | | |
