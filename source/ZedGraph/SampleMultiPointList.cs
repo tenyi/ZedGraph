@@ -1,6 +1,6 @@
 //============================================================================
 //ZedGraph Class Library - A Flexible Charting Library for .Net
-//Copyright � 2005 John Champion and Jerry Vos
+//Copyright � 2005 John Champion and Jerry Vos
 //
 //This library is free software; you can redistribute it and/or
 //modify it under the terms of the GNU Lesser General Public
@@ -19,6 +19,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 
@@ -150,10 +151,11 @@ namespace ZedGraph
 	{
 		/// <summary>
 		/// This is where the data are stored.  Duplicating the <see cref="SampleMultiPointList" />
-		/// copies the reference to this <see cref="ArrayList" />, but does not actually duplicate
+		/// copies the reference to this collection, but does not actually duplicate
 		/// the data.
 		/// </summary>
-		private ArrayList	DataCollection;
+		// B5-B3 (MOD-3)：泛型 List<PerformanceData> 取代 ArrayList（型別安全，移除下游 cast）
+		private List<PerformanceData> DataCollection;
 
 		/// <summary>
 		/// Determines what X data will be returned by the indexer of this list.
@@ -171,7 +173,7 @@ namespace ZedGraph
 		{
 			XData = PerfDataType.Time;
 			YData = PerfDataType.Distance;
-			DataCollection = new ArrayList();
+			DataCollection = new List<PerformanceData>();
 		}
 
 		/// <summary>
@@ -223,7 +225,7 @@ namespace ZedGraph
 				if ( index >= 0 && index < this.Count )
 				{
 					// grab the specified PerformanceData struct
-					PerformanceData perfData = (PerformanceData) DataCollection[index];
+					PerformanceData perfData = DataCollection[index];
 					// extract the values from the struct according to the user-set
 					// enum values of XData and YData
 					xVal = perfData[XData];
@@ -255,7 +257,9 @@ namespace ZedGraph
 		/// <returns>The ordinal position in the collection where the values were added</returns>
 		public int Add( PerformanceData perfData )
 		{
-			return DataCollection.Add( perfData );
+			// B5-B3 (MOD-3)：List<PerformanceData>.Add 為 void（異於 ArrayList.Add 回傳 int），改回傳新元素索引
+			DataCollection.Add( perfData );
+			return DataCollection.Count - 1;
 		}
 
 		/// <summary>

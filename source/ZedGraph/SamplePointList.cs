@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 
 namespace ZedGraph
@@ -82,7 +83,8 @@ namespace ZedGraph
 		public SampleType YType;
 
 		// Stores the collection of samples
-		private ArrayList list;
+		// B5-B3 (MOD-3)：泛型 List<Sample> 取代 ArrayList（型別安全，移除下游 cast）
+		private List<Sample> list;
 
 		/// <summary>
 		/// Indexer: get the Sample instance at the specified ordinal position in the list
@@ -96,7 +98,7 @@ namespace ZedGraph
 			get
 			{
 				PointPair pt = new PointPair();
-				Sample sample = (Sample) list[index];
+				Sample sample = list[index];
 				pt.X = GetValue( sample, XType );
 				pt.Y = GetValue( sample, YType );
 				return pt;
@@ -126,13 +128,13 @@ namespace ZedGraph
 				case SampleType.Time:
 					return sample.Time.ToOADate();
 				case SampleType.TimeDiff:
-					return sample.Time.ToOADate() - ( (Sample)list[0] ).Time.ToOADate();
+					return sample.Time.ToOADate() - list[0].Time.ToOADate();
 				case SampleType.VelocityAvg:
-					double timeDiff = sample.Time.ToOADate() - ( (Sample)list[0] ).Time.ToOADate();
+					double timeDiff = sample.Time.ToOADate() - list[0].Time.ToOADate();
 					if ( timeDiff <= 0 )
 						return PointPair.Missing;
 					else
-						return ( sample.Position - ( (Sample)list[0] ).Position ) / timeDiff;
+						return ( sample.Position - list[0].Position ) / timeDiff;
 				case SampleType.VelocityInst:
 					return sample.Velocity;
 				default:
@@ -147,7 +149,9 @@ namespace ZedGraph
 		/// <returns>The ordinal position at which the sample was added</returns>
 		public int Add( Sample sample )
 		{
-			return list.Add( sample );
+			// B5-B3 (MOD-3)：List<Sample>.Add 為 void（異於 ArrayList.Add 回傳 int），改回傳新元素索引
+			list.Add( sample );
+			return list.Count - 1;
 		}
 
 		// generic Clone: just call the typesafe version
@@ -174,7 +178,7 @@ namespace ZedGraph
 		{
 			XType = SampleType.Time;
 			YType = SampleType.Position;
-			list = new ArrayList();
+			list = new List<Sample>();
 		}
 
 		/// <summary>
