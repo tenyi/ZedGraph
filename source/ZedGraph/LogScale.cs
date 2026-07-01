@@ -1,6 +1,6 @@
 //============================================================================
 //ZedGraph Class Library - A Flexible Line Graph/Bar Graph Library in C#
-//Copyright � 2005  John Champion
+//Copyright � 2005  John Champion
 //
 //This library is free software; you can redistribute it and/or
 //modify it under the terms of the GNU Lesser General Public
@@ -399,7 +399,9 @@ namespace ZedGraph
 				_format = Scale.Default.Format;
 
 			if ( _isUseTenPower )
-				return string.Format( "{0:F0}", dVal );
+				// B5-B2 (MOD-2)：F0 固定點格式，dVal.ToString("F0") 與 string.Format("{0:F0}", dVal)
+				// 對 double 行為等價（皆依 current culture），改用較直接的 ToString 寫法。
+				return dVal.ToString( "F0" );
 			else
 				return Math.Pow( 10.0, dVal ).ToString( _format );
 		}
