@@ -53,7 +53,7 @@
 | B5-A4 | coverage 量測（FineCodeCoverage）與記錄 | — | — | ⏳ 待辦 |
 | **Part B — 現代化補強** | | | | |
 | B5-B1 (MOD-1) | `XDate.cs` ToString 12 處 `IndexOf` 加 `StringComparison.Ordinal` | `XDate.cs` | ✅ 高（純重構） | ✅ 完成（`3587803`，125 全綠） |
-| B5-B2 (MOD-2) | `LogScale.cs:402` `string.Format` → `ToString` | `LogScale.cs` | ✅ 高（純重構） | ⏳ 待辦 |
+| B5-B2 (MOD-2) | `LogScale.cs` MakeLabel `string.Format` → `ToString` | `LogScale.cs` | ✅ 高（純重構） | ✅ 完成（`538d3f1`，125 全綠；cosmetic 未寫專屬測試） |
 | B5-B3 (MOD-3) | `SamplePointList` / `SampleMultiPointList` `ArrayList` → `List<T>` | 2 檔 | 🟡 中（架構級，待評估） | ⏳ 待辦 |
 | **Part C — 遺失項目** | | | | |
 | L1–L4/L6 | 原始明細遺失 | — | — | ⏳ 待使用者補 |
