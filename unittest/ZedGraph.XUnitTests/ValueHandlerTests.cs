@@ -94,5 +94,28 @@ namespace ZedGraph.XUnitTests
             Assert.True(result);
             Assert.Equal(15.0, baseVal);
         }
+
+        /// <summary>
+        /// BarCenterValue 對 HiLowBarItem（baseAxis 非序數）應直接回傳傳入的 val，
+        /// 不經 Transform 計算（HiLow/Error/OHLC/Candle 分支的 else 路徑：
+        /// `if (IsAnyOrdinal &amp;&amp; iCluster&gt;=0 &amp;&amp; !IsOverrideOrdinal)` 為 false → return val）。
+        /// 鎖定此分支行為。預設 GraphPane 之 XAxis 為 LinearScale（非序數）。
+        /// </summary>
+        [Fact]
+        public void BarCenterValue_HiLowBar_NonOrdinal_ReturnsVal()
+        {
+            using var fx = new GraphicsFixture();
+            var pane = new GraphPane();
+            // HiLowBarItem：PointPairList 作為 IPointList（內容不影響此分支，僅型別判定）
+            var ppl = new PointPairList( new[] { 1.0 }, new[] { 10.0 } );
+            var curve = pane.AddHiLowBar( "h", ppl, System.Drawing.Color.Blue );
+            pane.AxisChange( fx.Graphics );
+
+            var vh = new ValueHandler( pane, false );
+            // 非 ordinal 軸 → return val（42.0）
+            double result = vh.BarCenterValue( curve, 10.0f, 0, 42.0, 0 );
+
+            Assert.Equal( 42.0, result );
+        }
     }
 }

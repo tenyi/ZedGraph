@@ -49,7 +49,7 @@
 | **Part A — Coverage 衝刺** | | | | |
 | B5-A1 | XDate 系統性測試（新檔 `XDatePropertiesFormatTests`） | `XDate.cs` | ✅ 高 | ✅ 完成（`15fbf02`，測試 115→125） |
 | B5-A2 | Scale 全系列測試（Text/Log/Date/Ordinal/Exponent） | `Scale.cs` 各子類 | ✅ 中 | ⏳ 待辦 |
-| B5-A3 | ValueHandler 系統性測試（擴充 `ValueHandlerTests`） | `ValueHandler.cs` | ✅ 高 | ⏳ 待辦 |
+| B5-A3 | ValueHandler BarCenterValue 測試 + A3 面向校正（無 NearestPoint/DataRange） | `ValueHandler.cs` | ✅ 高 | ✅ 完成（126 全綠） |
 | B5-A4 | coverage 量測（FineCodeCoverage）與記錄 | — | — | ⏳ 待辦 |
 | **Part B — 現代化補強** | | | | |
 | B5-B1 (MOD-1) | `XDate.cs` ToString 12 處 `IndexOf` 加 `StringComparison.Ordinal` | `XDate.cs` | ✅ 高（純重構） | ✅ 完成（`3587803`，125 全綠） |
@@ -95,13 +95,16 @@
 
 ### A3 — ValueHandler 系統性測試（擴充 `ValueHandlerTests.cs`）
 
-既有骨架：`GetValues` sanity。擴充面向：
+> **2026-07-01 校正**：ValueHandler 實際公開方法僅 `GetValues`（靜態+實例）與 `BarCenterValue`（實例）。
+> 初版計畫誤載 `NearestPoint`/`DataRange`（不存在），已修正。
 
-| 測試面向 | 對應 method |
-|----------|------------|
-| `NearestPoint`（找最近資料點） | `NearestPoint` |
-| `DataRange`（曲線資料範圍） | `DataRange` |
-| `GetValues` 各類曲線型（Line/Bar 等） | `GetValues` |
+既有骨架：`GetValues` 防護契約（null/越界/隱藏）+ baseVal。擴充面向：
+
+| 測試面向 | 對應 method | 性質 |
+|----------|------------|------|
+| `BarCenterValue` HiLow/OHLC 分支（return val / iCluster+1） | `BarCenterValue` | 有意義（最可測分支） |
+| `BarCenterValue` 一般 bar 分支（Transform 計算） | `BarCenterValue` | 🟡 依賴座標轉換，預期值難精確 |
+| `GetValues` 各類曲線型（Line/Bar 等） | `GetValues` | 有意義 |
 
 ### A4 — Coverage 量測
 
