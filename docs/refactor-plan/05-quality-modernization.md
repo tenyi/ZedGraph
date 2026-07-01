@@ -54,7 +54,7 @@
 | **Part B — 現代化補強** | | | | |
 | B5-B1 (MOD-1) | `XDate.cs` ToString 12 處 `IndexOf` 加 `StringComparison.Ordinal` | `XDate.cs` | ✅ 高（純重構） | ✅ 完成（`3587803`，125 全綠） |
 | B5-B2 (MOD-2) | `LogScale.cs` MakeLabel `string.Format` → `ToString` | `LogScale.cs` | ✅ 高（純重構） | ✅ 完成（`538d3f1`，125 全綠；cosmetic 未寫專屬測試） |
-| B5-B3 (MOD-3) | `SamplePointList` / `SampleMultiPointList` `ArrayList` → `List<T>` | 2 檔 | 🟢 低（非序列化、固定型別、可控） | 🔍 評估完成，待裁示 |
+| B5-B3 (MOD-3) | `SamplePointList` / `SampleMultiPointList` `ArrayList` → `List<T>` | 2 檔 | 🟢 低（非序列化、固定型別） | ✅ 完成（`1410977`，Part B 完整） |
 | **Part C — 遺失項目** | | | | |
 | L1–L4/L6 | 原始明細遺失 | — | — | ⏳ 待使用者補 |
 
@@ -175,13 +175,13 @@ return string.Format( "{0:F0}", dVal );   // → return dVal.ToString( "F0" );
 ## Batch 5 完成檢查
 
 ### 已完成 ✅
-- [ ] **B5-A1** XDate 系統性測試擴充
+- [x] **B5-A1** XDate 系統性測試擴充 ✅（`15fbf02`）
 - [ ] **B5-A2** Scale 全系列測試
-- [ ] **B5-A3** ValueHandler 系統性測試擴充
+- [x] **B5-A3** ValueHandler BarCenterValue 測試 ✅（`146b4cb`）
 - [ ] **B5-A4** Coverage 量測（FCC）line ≥ 30%
-- [ ] **B5-B1** XDate IndexOf 加 StringComparison.Ordinal（含 characterization test）
-- [ ] **B5-B2** LogScale string.Format → ToString（含 characterization test）
-- [ ] **B5-B3** ArrayList → List&lt;T&gt;（或評估後標註不修）
+- [x] **B5-B1** XDate IndexOf 加 StringComparison.Ordinal ✅（`3587803`）
+- [x] **B5-B2** LogScale string.Format → ToString ✅（`538d3f1`）
+- [x] **B5-B3** ArrayList → List&lt;T&gt; ✅（`1410977`，Part B 完整）
 
 ### 進行中 🟡
 - [ ] **L1–L4 / L6** 原始明細待補（請使用者提供原始審查筆記）
