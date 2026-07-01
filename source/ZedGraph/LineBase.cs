@@ -1,6 +1,6 @@
-//============================================================================
+ï»¿//============================================================================
 //ZedGraph Class Library - A Flexible Line Graph/Bar Graph Library in C#
-//Copyright © 2007  John Champion
+//Copyright ï¿½ 2007  John Champion
 //
 //This library is free software; you can redistribute it and/or
 //modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,6 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.Serialization;
-using System.Security.Permissions;
 
 namespace ZedGraph
 {
@@ -379,7 +378,6 @@ namespace ZedGraph
 		/// serialized data</param>
 		/// <param name="context">A <see cref="StreamingContext"/> instance that contains the
 		/// serialized data</param>
-		[SecurityPermissionAttribute( SecurityAction.Demand, SerializationFormatter = true )]
 		public virtual void GetObjectData( SerializationInfo info, StreamingContext context )
 		{
 			info.AddValue( "schema0", schema0 );

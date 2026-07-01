@@ -2,6 +2,10 @@ namespace ZedGraph
 {
     using System.Drawing;
 
+    /// <summary>
+    /// Provides a callback-based interface for showing a tool tip with a caption at a
+    /// given point on a chart.
+    /// </summary>
     public interface IValuesToolTip
     {
         /// <summary>

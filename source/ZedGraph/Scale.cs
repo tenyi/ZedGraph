@@ -1,4 +1,4 @@
-//============================================================================
+﻿//============================================================================
 //ZedGraph Class Library - A Flexible Line Graph/Bar Graph Library in C#
 //Copyright � 2004  John Champion
 //
@@ -21,7 +21,6 @@ using System;
 using System.Collections;
 using System.Text;
 using System.Runtime.Serialization;
-using System.Security.Permissions;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
@@ -307,7 +306,7 @@ namespace ZedGraph
 			/// code will select <see cref="MajorUnit"/> = <see cref="DateUnit.Year"/>
 			/// and <see cref="MinorUnit"/> = <see cref="DateUnit.Year"/>.
 			/// This value normally defaults to 1825 days (5 years).
-			/// This value is used by the <see cref="DateScale.CalcDateStepSize"/> method.
+			/// This value is used by the <see cref="DateScale.CalcDateStepSize(double, double)"/> method.
 			/// </summary>
 			public static double RangeYearYear = 1825;  // 5 years
 			/// <summary>
@@ -317,7 +316,7 @@ namespace ZedGraph
 			/// code will select <see cref="MajorUnit"/> = <see cref="DateUnit.Year"/>
 			/// and <see cref="MinorUnit"/> = <see cref="DateUnit.Month"/>.
 			/// This value normally defaults to 730 days (2 years).
-			/// This value is used by the <see cref="DateScale.CalcDateStepSize"/> method.
+			/// This value is used by the <see cref="DateScale.CalcDateStepSize(double, double)"/> method.
 			/// </summary>
 			public static double RangeYearMonth = 730;  // 2 years
 			/// <summary>
@@ -327,7 +326,7 @@ namespace ZedGraph
 			/// code will select <see cref="MajorUnit"/> = <see cref="DateUnit.Month"/>
 			/// and <see cref="MinorUnit"/> = <see cref="DateUnit.Month"/>.
 			/// This value normally defaults to 300 days (10 months).
-			/// This value is used by the <see cref="DateScale.CalcDateStepSize"/> method.
+			/// This value is used by the <see cref="DateScale.CalcDateStepSize(double, double)"/> method.
 			/// </summary>
 			public static double RangeMonthMonth = 300;  // 10 months
 			/// <summary>
@@ -337,7 +336,7 @@ namespace ZedGraph
 			/// code will select <see cref="MajorUnit"/> = <see cref="DateUnit.Day"/>
 			/// and <see cref="MinorUnit"/> = <see cref="DateUnit.Day"/>.
 			/// This value normally defaults to 10 days.
-			/// This value is used by the <see cref="DateScale.CalcDateStepSize"/> method.
+			/// This value is used by the <see cref="DateScale.CalcDateStepSize(double, double)"/> method.
 			/// </summary>
 			public static double RangeDayDay = 10;  // 10 days
 			/// <summary>
@@ -347,7 +346,7 @@ namespace ZedGraph
 			/// code will select <see cref="MajorUnit"/> = <see cref="DateUnit.Day"/>
 			/// and <see cref="MinorUnit"/> = <see cref="DateUnit.Hour"/>.
 			/// This value normally defaults to 3 days.
-			/// This value is used by the <see cref="DateScale.CalcDateStepSize"/> method.
+			/// This value is used by the <see cref="DateScale.CalcDateStepSize(double, double)"/> method.
 			/// </summary>
 			public static double RangeDayHour = 3;  // 3 days
 			/// <summary>
@@ -357,7 +356,7 @@ namespace ZedGraph
 			/// code will select <see cref="MajorUnit"/> = <see cref="DateUnit.Hour"/>
 			/// and <see cref="MinorUnit"/> = <see cref="DateUnit.Hour"/>.
 			/// This value normally defaults to 0.4167 days (10 hours).
-			/// This value is used by the <see cref="DateScale.CalcDateStepSize"/> method.
+			/// This value is used by the <see cref="DateScale.CalcDateStepSize(double, double)"/> method.
 			/// </summary>
 			public static double RangeHourHour = 0.4167;  // 10 hours
 			/// <summary>
@@ -367,7 +366,7 @@ namespace ZedGraph
 			/// code will select <see cref="MajorUnit"/> = <see cref="DateUnit.Hour"/>
 			/// and <see cref="MinorUnit"/> = <see cref="DateUnit.Minute"/>.
 			/// This value normally defaults to 0.125 days (3 hours).
-			/// This value is used by the <see cref="DateScale.CalcDateStepSize"/> method.
+			/// This value is used by the <see cref="DateScale.CalcDateStepSize(double, double)"/> method.
 			/// </summary>
 			public static double RangeHourMinute = 0.125;  // 3 hours
 			/// <summary>
@@ -377,7 +376,7 @@ namespace ZedGraph
 			/// code will select <see cref="MajorUnit"/> = <see cref="DateUnit.Minute"/>
 			/// and <see cref="MinorUnit"/> = <see cref="DateUnit.Minute"/>.
 			/// This value normally defaults to 6.94e-3 days (10 minutes).
-			/// This value is used by the <see cref="DateScale.CalcDateStepSize"/> method.
+			/// This value is used by the <see cref="DateScale.CalcDateStepSize(double, double)"/> method.
 			/// </summary>
 			public static double RangeMinuteMinute = 6.94e-3;  // 10 Minutes
 			/// <summary>
@@ -387,7 +386,7 @@ namespace ZedGraph
 			/// code will select <see cref="MajorUnit"/> = <see cref="DateUnit.Minute"/>
 			/// and <see cref="MinorUnit"/> = <see cref="DateUnit.Second"/>.
 			/// This value normally defaults to 2.083e-3 days (3 minutes).
-			/// This value is used by the <see cref="DateScale.CalcDateStepSize"/> method.
+			/// This value is used by the <see cref="DateScale.CalcDateStepSize(double, double)"/> method.
 			/// </summary>
 			public static double RangeMinuteSecond = 2.083e-3;  // 3 Minutes
 			/// <summary>
@@ -397,7 +396,7 @@ namespace ZedGraph
 			/// code will select <see cref="MajorUnit"/> = <see cref="DateUnit.Second"/>
 			/// and <see cref="MinorUnit"/> = <see cref="DateUnit.Second"/>.
 			/// This value normally defaults to 3.472e-5 days (3 seconds).
-			/// This value is used by the <see cref="DateScale.CalcDateStepSize"/> method.
+			/// This value is used by the <see cref="DateScale.CalcDateStepSize(double, double)"/> method.
 			/// </summary>
 			public static double RangeSecondSecond = 3.472e-5;  // 3 Seconds
 
@@ -408,7 +407,7 @@ namespace ZedGraph
 			/// selects a <see cref="Format"/> of <see cref="DateUnit.Year"/>
 			/// for <see cref="MajorUnit"/> and <see cref="DateUnit.Year"/> for 
 			/// for <see cref="MinorUnit"/>.
-			/// This value is used by the <see cref="DateScale.CalcDateStepSize"/> method.
+			/// This value is used by the <see cref="DateScale.CalcDateStepSize(double, double)"/> method.
 			/// </summary>
 			/// <seealso cref="System.Globalization.DateTimeFormatInfo"/>
 			public static string FormatYearYear = "yyyy";
@@ -419,7 +418,7 @@ namespace ZedGraph
 			/// selects a <see cref="Format"/> of <see cref="DateUnit.Year"/>
 			/// for <see cref="MajorUnit"/> and <see cref="DateUnit.Month"/> for 
 			/// for <see cref="MinorUnit"/>.
-			/// This value is used by the <see cref="DateScale.CalcDateStepSize"/> method.
+			/// This value is used by the <see cref="DateScale.CalcDateStepSize(double, double)"/> method.
 			/// </summary>
 			/// <seealso cref="System.Globalization.DateTimeFormatInfo"/>
 			public static string FormatYearMonth = "MMM-yyyy";
@@ -430,7 +429,7 @@ namespace ZedGraph
 			/// selects a <see cref="Format"/> of <see cref="DateUnit.Month"/>
 			/// for <see cref="MajorUnit"/> and <see cref="DateUnit.Month"/> for 
 			/// for <see cref="MinorUnit"/>.
-			/// This value is used by the <see cref="DateScale.CalcDateStepSize"/> method.
+			/// This value is used by the <see cref="DateScale.CalcDateStepSize(double, double)"/> method.
 			/// </summary>
 			/// <seealso cref="System.Globalization.DateTimeFormatInfo"/>
 			public static string FormatMonthMonth = "MMM-yyyy";
@@ -441,7 +440,7 @@ namespace ZedGraph
 			/// selects a <see cref="Format"/> of <see cref="DateUnit.Day"/>
 			/// for <see cref="MajorUnit"/> and <see cref="DateUnit.Day"/> for 
 			/// for <see cref="MinorUnit"/>.
-			/// This value is used by the <see cref="DateScale.CalcDateStepSize"/> method.
+			/// This value is used by the <see cref="DateScale.CalcDateStepSize(double, double)"/> method.
 			/// </summary>
 			/// <seealso cref="System.Globalization.DateTimeFormatInfo"/>
 			public static string FormatDayDay = "d-MMM";
@@ -452,7 +451,7 @@ namespace ZedGraph
 			/// selects a <see cref="Format"/> of <see cref="DateUnit.Day"/>
 			/// for <see cref="MajorUnit"/> and <see cref="DateUnit.Hour"/> for 
 			/// for <see cref="MinorUnit"/>.
-			/// This value is used by the <see cref="DateScale.CalcDateStepSize"/> method.
+			/// This value is used by the <see cref="DateScale.CalcDateStepSize(double, double)"/> method.
 			/// </summary>
 			/// <seealso cref="System.Globalization.DateTimeFormatInfo"/>
 			public static string FormatDayHour = "d-MMM HH:mm";
@@ -463,7 +462,7 @@ namespace ZedGraph
 			/// selects a <see cref="Format"/> of <see cref="DateUnit.Hour"/>
 			/// for <see cref="MajorUnit"/> and <see cref="DateUnit.Hour"/> for 
 			/// for <see cref="MinorUnit"/>.
-			/// This value is used by the <see cref="DateScale.CalcDateStepSize"/> method.
+			/// This value is used by the <see cref="DateScale.CalcDateStepSize(double, double)"/> method.
 			/// </summary>
 			/// <seealso cref="System.Globalization.DateTimeFormatInfo"/>
 			public static string FormatHourHour = "HH:mm";
@@ -474,7 +473,7 @@ namespace ZedGraph
 			/// selects a <see cref="Format"/> of <see cref="DateUnit.Hour"/>
 			/// for <see cref="MajorUnit"/> and <see cref="DateUnit.Minute"/> for 
 			/// for <see cref="MinorUnit"/>.
-			/// This value is used by the <see cref="DateScale.CalcDateStepSize"/> method.
+			/// This value is used by the <see cref="DateScale.CalcDateStepSize(double, double)"/> method.
 			/// </summary>
 			/// <seealso cref="System.Globalization.DateTimeFormatInfo"/>
 			public static string FormatHourMinute = "HH:mm";
@@ -485,7 +484,7 @@ namespace ZedGraph
 			/// selects a <see cref="Format"/> of <see cref="DateUnit.Minute"/>
 			/// for <see cref="MajorUnit"/> and <see cref="DateUnit.Minute"/> for 
 			/// for <see cref="MinorUnit"/>.
-			/// This value is used by the <see cref="DateScale.CalcDateStepSize"/> method.
+			/// This value is used by the <see cref="DateScale.CalcDateStepSize(double, double)"/> method.
 			/// </summary>
 			/// <seealso cref="System.Globalization.DateTimeFormatInfo"/>
 			public static string FormatMinuteMinute = "HH:mm";
@@ -496,7 +495,7 @@ namespace ZedGraph
 			/// selects a <see cref="Format"/> of <see cref="DateUnit.Minute"/>
 			/// for <see cref="MajorUnit"/> and <see cref="DateUnit.Second"/> for 
 			/// for <see cref="MinorUnit"/>.
-			/// This value is used by the <see cref="DateScale.CalcDateStepSize"/> method.
+			/// This value is used by the <see cref="DateScale.CalcDateStepSize(double, double)"/> method.
 			/// </summary>
 			/// <seealso cref="System.Globalization.DateTimeFormatInfo"/>
 			public static string FormatMinuteSecond = "mm:ss";
@@ -507,7 +506,7 @@ namespace ZedGraph
 			/// selects a <see cref="Format"/> of <see cref="DateUnit.Second"/>
 			/// for <see cref="MajorUnit"/> and <see cref="DateUnit.Second"/> for 
 			/// for <see cref="MinorUnit"/>.
-			/// This value is used by the <see cref="DateScale.CalcDateStepSize"/> method.
+			/// This value is used by the <see cref="DateScale.CalcDateStepSize(double, double)"/> method.
 			/// </summary>
 			/// <seealso cref="System.Globalization.DateTimeFormatInfo"/>
 			public static string FormatSecondSecond = "mm:ss";
@@ -518,7 +517,7 @@ namespace ZedGraph
 			/// selects a <see cref="Format"/> of <see cref="DateUnit.Millisecond"/>
 			/// for <see cref="MajorUnit"/> and <see cref="DateUnit.Millisecond"/> for 
 			/// for <see cref="MinorUnit"/>.
-			/// This value is used by the <see cref="DateScale.CalcDateStepSize"/> method.
+			/// This value is used by the <see cref="DateScale.CalcDateStepSize(double, double)"/> method.
 			/// </summary>
 			/// <seealso cref="System.Globalization.DateTimeFormatInfo"/>
 			public static string FormatMillisecond = "ss.fff";
@@ -903,7 +902,6 @@ namespace ZedGraph
 		/// </remarks>
 		/// <param name="info">A <see cref="SerializationInfo"/> instance that defines the serialized data</param>
 		/// <param name="context">A <see cref="StreamingContext"/> instance that contains the serialized data</param>
-		[SecurityPermissionAttribute(SecurityAction.Demand,SerializationFormatter=true)]
 		public virtual void GetObjectData( SerializationInfo info, StreamingContext context )
 		{
 			info.AddValue( "schema", schema );

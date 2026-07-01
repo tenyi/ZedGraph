@@ -65,7 +65,7 @@ namespace ZedGraph.Demo
 					xDate.AddDays( 2.0 );
 			}
 
-			CandleStickItem myCurve = myPane.AddCandleStick( "trades", spl, Color.Black );
+			JapaneseCandleStickItem myCurve = myPane.AddJapaneseCandleStick( "trades", spl );
 			myCurve.Stick.IsAutoSize = true;
 			myCurve.Stick.Color = Color.Blue;
 

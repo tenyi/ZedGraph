@@ -4,6 +4,11 @@ namespace ZedGraph
     using System.Drawing;
     using System.Windows.Forms;
 
+    /// <summary>
+    /// Default <see cref="IValuesToolTip"/> implementation that delegates to a
+    /// <see cref="ToolTip"/> control and remembers the last point/caption so duplicate
+    /// calls do not re-show the same tool tip.
+    /// </summary>
     public class ValuesToolTip : IValuesToolTip
     {
         #region Fields

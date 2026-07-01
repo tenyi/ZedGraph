@@ -14,7 +14,9 @@ namespace ZedGraph.UnitTest
         public static int delayTime = 500;
         static System.Windows.Forms.Timer myTimer = new System.Windows.Forms.Timer();
         static bool exitFlag;
+        #pragma warning disable CS0649 // 保留欄位供測試擴充使用，目前未指派
         public static bool clickDone;
+#pragma warning restore CS0649
 
         public static void SetUp()
         {

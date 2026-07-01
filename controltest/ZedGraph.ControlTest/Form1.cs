@@ -1,4 +1,6 @@
 
+// Form1.cs 含多處實驗性 dead code（return 後的程式碼），保留作為測試用途參考
+#pragma warning disable CS0162
 using System;
 using System.Collections;
 using System.Collections.Generic;

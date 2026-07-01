@@ -24,7 +24,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Text;
 using System.Runtime.Serialization;
-using System.Security.Permissions;
 
 #endregion
 
@@ -246,7 +245,6 @@ namespace ZedGraph
 		/// </summary>
 		/// <param name="info">A <see cref="SerializationInfo"/> instance that defines the serialized data</param>
 		/// <param name="context">A <see cref="StreamingContext"/> instance that contains the serialized data</param>
-		[SecurityPermissionAttribute(SecurityAction.Demand,SerializationFormatter=true)]
 		public virtual void GetObjectData( SerializationInfo info, StreamingContext context )
 		{
 			info.AddValue( "schema", schema );

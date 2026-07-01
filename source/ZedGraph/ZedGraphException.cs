@@ -1,6 +1,6 @@
 //============================================================================
 //ZedGraphException Class
-//Copyright � 2004  Jerry Vos
+//Copyright � 2004  Jerry Vos
 //
 //This library is free software; you can redistribute it and/or
 //modify it under the terms of the GNU Lesser General Public
@@ -37,11 +37,15 @@ namespace ZedGraph
 		/// instance that holds the serialized object data about the exception being thrown.</param>
 		/// <param name="context">The <see cref="System.Runtime.Serialization.StreamingContext"/>
 		/// instance that contains contextual information about the source or destination.</param>
-		protected ZedGraphException( System.Runtime.Serialization.SerializationInfo info, 
+		// SYSLIB0051: ApplicationException 的序列化建構子在 .NET 8 已標記為過時，
+		// 但 binary formatter 反序列化仍需呼叫此建構子，移除會破壞既有客戶端的二進位還原序列化。
+#pragma warning disable SYSLIB0051
+		protected ZedGraphException( System.Runtime.Serialization.SerializationInfo info,
 										System.Runtime.Serialization.StreamingContext context )
 			: base ( info, context )
 		{
 		}
+#pragma warning restore SYSLIB0051
 		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Exception"/> class with a specified
