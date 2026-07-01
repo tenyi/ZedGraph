@@ -48,15 +48,18 @@
 |------|------|------|--------|------|
 | **Part A — Coverage 衝刺** | | | | |
 | B5-A1 | XDate 系統性測試（新檔 `XDatePropertiesFormatTests`） | `XDate.cs` | ✅ 高 | ✅ 完成（`15fbf02`，測試 115→125） |
-| B5-A2 | Scale 全系列測試（分塊進行中） | `Scale.cs` 各子類 | ✅ 中 | 🟡 第一二塊（LogScale+DateScale）完成（測試 137）；TextScale/OrdinalScale/ExponentScale 待續 |
-| B5-A3 | ValueHandler BarCenterValue 測試 + A3 面向校正（無 NearestPoint/DataRange） | `ValueHandler.cs` | ✅ 高 | ✅ 完成（126 全綠） |
-| B5-A4 | coverage 量測（FineCodeCoverage）與記錄 | — | — | ⏳ 待辦 |
+| B5-A2 | Scale 全系列測試（分塊進行中） | `Scale.cs` 各子類 | ✅ 中 | 🟡 **2/5 塊完成**：`7927819` LogScale（測試 130→134）、`463159e` DateScale（測試 134→137）；TextScale/OrdinalScale/ExponentScale 待續 |
+| B5-A3 | ValueHandler BarCenterValue 測試 + A3 面向校正（無 NearestPoint/DataRange） | `ValueHandler.cs` | ✅ 高 | ✅ 完成（`146b4cb`，測試 125→126） |
+| B5-A4 | coverage 量測（FineCodeCoverage）與記錄 | — | — | ⏳ 待辦（CLI coverlet 對 net48+Exe 不相容，需 VS 內 FCC） |
 | **Part B — 現代化補強** | | | | |
-| B5-B1 (MOD-1) | `XDate.cs` ToString 12 處 `IndexOf` 加 `StringComparison.Ordinal` | `XDate.cs` | ✅ 高（純重構） | ✅ 完成（`3587803`，125 全綠） |
+| B5-B1 (MOD-1) | `XDate.cs` ToString 12 處 `IndexOf` 加 `StringComparison.Ordinal` | `XDate.cs` | ✅ 高（純重構） | ✅ 完成（`3587803`，125 全綠；cosmetic） |
 | B5-B2 (MOD-2) | `LogScale.cs` MakeLabel `string.Format` → `ToString` | `LogScale.cs` | ✅ 高（純重構） | ✅ 完成（`538d3f1`，125 全綠；cosmetic 未寫專屬測試） |
-| B5-B3 (MOD-3) | `SamplePointList` / `SampleMultiPointList` `ArrayList` → `List<T>` | 2 檔 | 🟢 低（非序列化、固定型別） | ✅ 完成（`1410977`，Part B 完整） |
+| B5-B3 (MOD-3) | `SamplePointList` / `SampleMultiPointList` `ArrayList` → `List<T>` | 2 檔 | 🟢 低（非序列化、固定型別） | ✅ 完成（`1410977`，測試 126→130；Part B 完整） |
 | **Part C — 遺失項目** | | | | |
-| L1–L4/L6 | 原始明細遺失 | — | — | ⏳ 待使用者補 |
+| L1–L4/L6 | 原始明細遺失 | — | — | ⏳ 待使用者補原始審查筆記 |
+
+> **累計**：Batch 5 至今測試 **115→137**（+22），Part B 完整完成，Part A 主力推進中。
+> **下一個非測試交付物**：使用者於 VS 內用 FineCodeCoverage 量測 → 記錄 A4 coverage 數字。
 
 ---
 
@@ -176,15 +179,24 @@ return string.Format( "{0:F0}", dVal );   // → return dVal.ToString( "F0" );
 
 ### 已完成 ✅
 - [x] **B5-A1** XDate 系統性測試擴充 ✅（`15fbf02`）
-- [ ] **B5-A2** Scale 全系列測試
+- [ ] **B5-A2** Scale 全系列測試 — 🟡 2/5 塊完成（LogScale `7927819`、DateScale `463159e`）；剩 TextScale / OrdinalScale / ExponentScale
 - [x] **B5-A3** ValueHandler BarCenterValue 測試 ✅（`146b4cb`）
-- [ ] **B5-A4** Coverage 量測（FCC）line ≥ 30%
+- [ ] **B5-A4** Coverage 量測（FCC）line ≥ 30% — 阻塞於 CLI 不相容 net48+Exe，待 VS 內 FCC
 - [x] **B5-B1** XDate IndexOf 加 StringComparison.Ordinal ✅（`3587803`）
 - [x] **B5-B2** LogScale string.Format → ToString ✅（`538d3f1`）
-- [x] **B5-B3** ArrayList → List&lt;T&gt; ✅（`1410977`，Part B 完整）
+- [x] **B5-B3** ArrayList → List&lt;T&gt; ✅（`1410977`，**Part B 完整**）
 
 ### 進行中 🟡
 - [ ] **L1–L4 / L6** 原始明細待補（請使用者提供原始審查筆記）
+
+### 全專案累計（Batch 0–5）
+
+| 指標 | 數值 |
+|------|------|
+| 測試數 | **137**（Batch 5 期間 +22：115→137） |
+| 測試通過率 | 100% 全綠 |
+| 已修 actionable 項目 | Batch 1–4 全部 + Batch 5 Part B 全部 + Batch 5 Part A 三項（A1/A3/A2 部分） |
+| 現代化訊號掃描 | ✅ 完成（`[Obsolete]` 0、`#nullable` 0、`ArrayList` 0 殘留、`string.Format` 0 殘留、`StringComparison` 顯式化完成） |
 
 ### 每批結束驗證
 ```powershell
